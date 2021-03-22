@@ -3,21 +3,16 @@ import atexit
 import os
 import signal
 import socket
-import logging
 
 import uvloop as uvloop
 
 from context import request
 from context import response
 from utils import config
-
-logger = logging.getLogger('server')
-logger.setLevel(logging.INFO)
-logging.basicConfig(format='%(asctime)s %(message)s')
+from utils.logger import logger
 
 
 async def handle(sock):
-
     raw = await asyncio.get_event_loop().sock_recv(sock, 1024)
     req = request.Request(raw.decode('utf-8'))
     result_code = req.parse_request()

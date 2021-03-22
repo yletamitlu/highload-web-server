@@ -3,6 +3,7 @@ from datetime import datetime
 from socket import socket
 from utils import consts
 from utils import config
+from utils.logger import logger
 import pathlib
 import os
 
@@ -40,12 +41,19 @@ class Response:
             self.response += f'{header}: {value}' + consts.LINE_SEP
         self.response += consts.LINE_SEP
 
-    def __read_file(self):
+    async def __read_file(self):
         with open(self.filepath, 'rb') as f:
             return f.read()
 
     async def send(self, conn: socket):
         conn.sendall(self.response.encode('utf-8'))
         if self.status_code == consts.STATUS_OK and self.method == consts.METHOD_GET and self.filepath is not None:
-            body = self.__read_file()
-            await asyncio.get_event_loop().sock_sendall(conn, body)
+            with open(self.filepath, 'rb') as file:
+                part = file.read(1024)
+                while len(part) > 0:
+                    try:
+                        await asyncio.get_event_loop().sock_sendall(conn, part)
+                    except (BrokenPipeError, ConnectionResetError, OSError) as e:
+                        logger.warning(str(e))
+                        return
+                    part = file.read(1024)

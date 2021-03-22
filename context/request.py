@@ -1,12 +1,8 @@
 from urllib.parse import unquote
 from utils import consts
 from utils import config
-import logging
+from utils.logger import logger
 import os
-
-logger = logging.getLogger('context')
-logger.setLevel(logging.CRITICAL)
-logging.basicConfig(format='%(asctime)s %(message)s')
 
 
 class Request:
