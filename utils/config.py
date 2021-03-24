@@ -2,4 +2,4 @@ ROOT_PATH = '/Users/ekaterinaalekseeva/FILES/technopark/sem#3/HL/highload-web-se
 HOST = '127.0.0.1'
 PORT = 80
 SERVE_NAME = 'highload-web-server'
-CPU_LIMIT = 4
+CPU_LIMIT = 2

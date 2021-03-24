@@ -1,3 +1,5 @@
+CONFIG_PATH = '/etc/httpd.conf'
+
 METHOD_GET = 'GET'
 METHOD_HEAD = 'HEAD'
 
