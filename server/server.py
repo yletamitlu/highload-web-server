@@ -33,7 +33,7 @@ class Server:
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server_socket.bind((self.host, self.port))
-        server_socket.listen(512)
+        server_socket.listen()
         server_socket.setblocking(False)
 
         self.server_socket = server_socket
@@ -49,6 +49,7 @@ class Server:
                 self.handle_parent(pid)
 
         for pid in self.process_pull:
+            print('waidpid', pid)
             os.waitpid(pid, 0)
 
     def handle_parent(self, pid: int):
@@ -64,4 +65,4 @@ class Server:
     def kill_children(self):
         for pid in self.process_pull:
             logger.info(f'Kill pid: {pid}')
-            os.kill(pid, signal.SIGTERM)
+            os.kill(pid, signal.SIGKILL)
